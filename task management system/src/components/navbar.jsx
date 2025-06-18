@@ -32,7 +32,7 @@ export default function Navbar() {
       <nav className="nav-wrapper">
         <div className="container">
           <Link className="brand-logo" to="/">
-            Project share
+            Project Share
           </Link>
           <div className="hide-on-large-only">
             <i

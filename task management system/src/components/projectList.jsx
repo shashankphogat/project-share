@@ -5,6 +5,8 @@ import { useDispatch } from "react-redux";
 import { fetchProjects } from "../slices/projectSlice";
 import Notifications from "./notifications";
 import moment from "moment";
+import { useMemo } from "react";
+
 
 function Projectlist() {
   const dispatch = useDispatch();
@@ -14,10 +16,10 @@ function Projectlist() {
     dispatch(fetchProjects());
   }, [dispatch]);
 
+  let slicedProjects=useMemo(()=>[...projectList].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0,5),[projectList])
+
   function mapProjectsToComponent() {
-    return [...projectList]
-      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
-      .slice(0, 5)
+    return slicedProjects
       .map((project) => {
         return (
           <Link to={`/AboutProject/${project.id}`} key={project.id}>

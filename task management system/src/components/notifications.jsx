@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import moment from "moment";
 import { fetchNotifications } from "../slices/notificationSlice";
+import { useMemo } from "react";
 
 export default function Notifications() {
   const { items, status } = useSelector((state) => state.notifications);
@@ -15,6 +16,10 @@ export default function Notifications() {
     }
   }, [status, dispatch]);
 
+  let slicedNotifications=useMemo(()=>[...items]
+  .sort((a, b) => b.createdAt - a.createdAt)
+  .slice(0, 4),[items])
+
   if (status === "loading") return <p>Loading notifications...</p>;
   if (!items.length) return <p>No notifications</p>;
 
@@ -24,9 +29,7 @@ export default function Notifications() {
         <div className="card">
           <div className="card-content grey-text text-darken-3">
             <div className="card-title">Notifications</div>
-            {[...items]
-              .sort((a, b) => b.createdAt - a.createdAt)
-              .slice(0, 4)
+            {slicedNotifications
               .map((notification) => (
                 <p key={notification.id}>
                   <strong>{notification.user}:</strong> {notification.content}

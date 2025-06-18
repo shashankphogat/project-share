@@ -1,12 +1,14 @@
 import Navbar from "./components/navbar";
-import Projectlist from "./components/projectlist";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Addproject from "./components/addproject";
-import LogIn from "./components/logIn";
-import SignUp from "./components/signUp";
-import AboutProject from "./components/aboutProject";
+import { lazy, Suspense } from "react";
+const Addproject = lazy(() => import("./components/addproject"));
+const LogIn = lazy(() => import("./components/logIn"));
+const SignUp = lazy(() => import("./components/signUp"));
+const AboutProject = lazy(() => import("./components/aboutProject"));
+const Projectlist=lazy(()=>import("./components/projectlist"))
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
+
 
 function App() {
   const authId = useSelector((state) => state.authListener.user);
@@ -14,6 +16,7 @@ function App() {
     <>
       <BrowserRouter>
         <Navbar />
+        <Suspense fallback={<div>Loading...</div>}>
         <Routes>
           <Route
             path="/"
@@ -40,6 +43,7 @@ function App() {
             }
           />
         </Routes>
+        </Suspense>
       </BrowserRouter>
     </>
   );

@@ -3,10 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { logIn } from "../slices/authSlice";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
+
 
 export default function LogIn() {
   const dispatch = useDispatch();
   const nav = useNavigate();
+  const location = useLocation();
+  const [authError,setAuthError]=useState(null)
 
   const [data, setData] = useState({
     email: "",
@@ -23,6 +28,9 @@ export default function LogIn() {
         nav("/");
       }
     } catch (error) {
+      if(authData?.error){
+      setAuthError(authData.error)
+      }
       return error;
     }
   };
@@ -33,6 +41,10 @@ export default function LogIn() {
       return { ...prev, [id]: value };
     });
   };
+
+  useEffect(() => {
+    setAuthError(null);
+  }, [location.pathname]);
 
   return (
     <div className="container row">
@@ -68,9 +80,9 @@ export default function LogIn() {
           </div>
         </form>
       </div>
-      {authData?.error && (
+      {authError && (
         <div className="col s12">
-          <p className="error">{authData?.error}</p>
+          <p className="error">{authError}</p>
         </div>
       )}
     </div>
